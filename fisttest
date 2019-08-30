@@ -3,10 +3,7 @@
 -->
 <template>
   <div class="hap-page">
-    <div class="hap-row">
-      <text>默认</text>
-      <textarea>{{textarea1.valueNull}}</textarea>
-    </div>
+  
     <div class="hap-row">
       <text>placeholder</text>
       <textarea placeholder="{{textarea1.placeholder}}">{{textarea1.valueNull}}</textarea>
