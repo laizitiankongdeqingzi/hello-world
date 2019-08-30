@@ -1,0 +1,133 @@
+<!--
+    Copyright (C) 2017, hapjs.org. All rights reserved.
+-->
+<template>
+  <div class="hap-page">
+    <div class="hap-row">
+      <text>默认</text>
+      <textarea>{{textarea1.valueNull}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>placeholder</text>
+      <textarea placeholder="{{textarea1.placeholder}}">{{textarea1.valueNull}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>属性placeholder颜色</text>
+      <textarea style="placeholder-color: #FF0000;" placeholder="{{textarea1.placeholder}}">{{textarea1.valueNull}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>样式placeholder颜色</text>
+      <textarea class="placeholder-color" placeholder="{{textarea1.placeholder}}">{{textarea1.valueNull}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>onchange事件：{{textarea1.valueLen}}</text>
+      <textarea class="text-color" onchange="{{onChangeHandler}}">{{textarea1.value}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>onlinechange事件</text>
+      <text>行高：{{textarea1.height}} </text>
+      <text>行数：{{textarea1.lineCount}}</text>
+      <textarea class="text-color"  @onlinechange="onLineChange">{{textarea1.valueNull}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text onclick="onClickHandler">focus方法</text>
+      <textarea id="onFocusInput1" class="text-color">{{textarea1.value}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text>selectionChange事件：{{currentValue}}</text>
+      <textarea class="text-color" id="selectChange" onselectionchange="onSelectionChangeHandler" onchange="onChangeHandlerSelect">{{textValue}}</textarea>
+    </div>
+    <div class="hap-row">
+      <text onclick="selectAll()">点击这行选择全部文本</text>
+      <textarea id="textSelect">这里是文本</textarea>
+    </div>
+    <div class="hap-row">
+      <text>最多输入5个</text>
+      <textarea maxlength=5 placeholder="请输入，最多输入5个"></textarea>
+    </div>
+  </div>
+</template>
+
+<style>
+  @import "../../../common/index.css";
+
+  text {
+    width: 300px;
+  }
+
+  .text-color {
+    color: #00beaf;
+  }
+
+  .placeholder-color {
+    placeholder-color: #ff0000;
+  }
+</style>
+
+<script>
+  /**
+   * 标识：测试示例
+   * @desc 组件textarea
+   */
+   import prompt from '@system.prompt' 
+  export default {
+    private: {
+      textarea1: {
+        valueNull: null,
+        value: '内容文本',
+        placeholder: '请输入内容',
+        valueLen: '',
+        isFocus: false,
+        lineCount:'',
+        height: '',
+      },
+      currentValue: '',
+      changeValue: '',
+      textValue: '选中文本改变和光标移动时触发',
+    },
+    onInit() {
+      this.$page.setTitleBar({ text: 'textarea' })
+    },
+    onChangeHandler(evt) {
+      this.textarea1.value = evt.text
+      this.textarea1.valueLen = this.textarea1.value.length
+      
+    },
+    onLineChange(evt){
+      this.textarea1.height = evt.height
+      this.textarea1.lineCount = evt.lineCount
+      // prompt.showToast({
+      //   message: 'ceshi'
+      // })
+    },
+    onChangeHandlerSelect(evt) {
+      this.changeValue = evt.value
+    },
+    onClickHandler() {
+      if (!this.textarea1.isFocus) {
+        this.$element('onFocusInput1').focus()
+        this.textarea1.isFocus = true
+      }
+      else {
+        this.$element('onFocusInput1').focus(false)
+        this.textarea1.isFocus = false
+      }
+    },
+    onSelectionChangeHandler() {
+      const that = this
+      this.$element('selectChange').getSelectionRange({
+        callback: function (start, end) {
+          if (start === end) {
+            that.currentValue = start
+          } else {
+            that.currentValue = that.changeValue.substring(start, end)
+          }
+        }
+      })
+    },
+    selectAll() {
+      this.$element('textSelect').focus()
+      this.$element('textSelect').select()
+    }
+  }
+</script>
